@@ -1,0 +1,4 @@
+instructions.txt
+__pycache__/
+*.csv
+*main.py
