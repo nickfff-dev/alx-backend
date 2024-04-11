@@ -6,7 +6,6 @@ It implements a caching system using the LFU algorithm.
 """
 
 from base_caching import BaseCaching
-from collections import defaultdict
 
 
 class LFUCache(BaseCaching):
@@ -19,9 +18,8 @@ class LFUCache(BaseCaching):
         Calls the parent class's __init__ method.
         """
         super().__init__()
-        self.cache_data = {}
-        self.freq_map = defaultdict(list)
         self.keys = []
+        self.uses = {}
 
     def put(self, key, item):
         """Add an item to the cache.
@@ -38,27 +36,30 @@ class LFUCache(BaseCaching):
             if key in self.cache_data:
                 self.cache_data[key] = item
                 self.keys.remove(key)
+                self.keys.append(key)
+                self.uses[key] += 1
             else:
                 if len(self.cache_data) >= self.MAX_ITEMS:
-                    min_freq = min(self.freq_map)
-                    candidates = self.freq_map[min_freq]
+                    min_freq = min(self.uses.values())
+                    candidates = [
+                        k for k, v in self.uses.items() if v == min_freq]
                     if len(candidates) > 1:
                         # Use LRU to discard the least recently used among the
                         # candidates
                         discarded_key = candidates.pop(0)
                         del self.cache_data[discarded_key]
-                        self.freq_map[min_freq].remove(discarded_key)
-                        if not self.freq_map[min_freq]:
-                            del self.freq_map[min_freq]
+                        self.keys.remove(discarded_key)
+                        del self.uses[discarded_key]
                     else:
                         # Discard the only candidate
                         discarded_key = candidates[0]
                         del self.cache_data[discarded_key]
-                        del self.freq_map[min_freq]
+                        del self.uses[discarded_key]
                     print("DISCARD: {}".format(discarded_key))
                 self.cache_data[key] = item
                 self.keys.append(key)
-                self.freq_map[1].append(key)
+                # Initialize the frequency of the new key to 1
+                self.uses[key] = 1
 
     def get(self, key):
         """Retrieve an item from the cache by key.
@@ -71,7 +72,7 @@ class LFUCache(BaseCaching):
             if key in self.cache_data:
                 self.keys.remove(key)
                 self.keys.append(key)
-                self.freq_map[self.freq_map[key]].remove(key)
-                self.freq_map[self.freq_map[key] + 1].append(key)
+                # Increment the frequency of the accessed key
+                self.uses[key] += 1
                 return self.cache_data[key]
         return None
