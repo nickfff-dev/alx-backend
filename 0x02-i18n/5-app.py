@@ -2,6 +2,7 @@
 """ Module to  create a Flask app and set up the Babel object."""
 from flask import Flask, render_template, request, g
 from flask_babel import Babel
+from typing import Dict, Union
 
 
 class Config:
@@ -25,7 +26,7 @@ users = {
 }
 
 
-def get_user() -> dict:
+def get_user() -> Union[Dict, None]:
     """Return a user dictionary or None if the ID cannot be found."""
     user_id = request.args.get('login_as')
     if user_id:
