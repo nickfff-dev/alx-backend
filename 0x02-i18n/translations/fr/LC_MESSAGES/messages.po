@@ -22,7 +22,14 @@ msgstr ""
 msgid "Welcome to Holberton"
 msgstr "Bienvenue chez Holberton"
 
-#: templates/3-index.html:9
+#: templates/3-index.html:9 templates/4-index.html:9 templates/5-index.html:9
 msgid "Hello world!"
 msgstr "Bonjour monde!"
 
+#: templates/5-index.html:11
+msgid "You are logged in as %(username)s."
+msgstr "Vous êtes connecté en tant que %(username)s."
+
+#: templates/5-index.html:13
+msgid "You are not logged in."
+msgstr "Vous n'êtes pas connecté."
