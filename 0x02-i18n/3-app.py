@@ -3,13 +3,13 @@
 """
 
 from flask import Flask, render_template, request
-from flask_babel import Babel, gettext, lazy_gettext
+from flask_babel import Babel
 
 
 class Config:
     """Configuration for the Flask app."""
     LANGUAGES = ["en", "fr"]
-    BABEL_DEFAULT_LOCALE = "fr"
+    BABEL_DEFAULT_LOCALE = "en"
     BABEL_DEFAULT_TIMEZONE = "UTC"
 
 
