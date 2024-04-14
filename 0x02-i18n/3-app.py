@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Module to  create a Flask app.
+""" Module to  create a Flask app and set up the Babel object.
 """
 
 from flask import Flask, render_template, request
@@ -8,6 +8,7 @@ from flask_babel import Babel
 
 class Config:
     """Configuration for the Flask app."""
+    DEBUG = True
     LANGUAGES = ["en", "fr"]
     BABEL_DEFAULT_LOCALE = "en"
     BABEL_DEFAULT_TIMEZONE = "UTC"
@@ -32,4 +33,4 @@ def index() -> str:
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
