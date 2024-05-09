@@ -53,24 +53,22 @@ const jobs = [
 
 // Function to create and manage jobs
 function createJob(data) {
-  const job = queue.create('push_notification_code_2', data)
-    .save((error) => {
-      if (!error) {
-        console.log(`Notification job created: ${job.id}`);
-      }
+  const job = queue.create('push_notification_code_2', data);
+  job.save((error) => {
+    if (!error) {
+      console.log(`Notification job created: ${job.id}`);
+    }
+  });
+  job
+    .on('complete', () => {
+      console.log(`Notification job ${job.id} completed`);
+    })
+    .on('failed', (error) => {
+      console.log(`Notification job ${job.id} failed: ${error}`);
+    })
+    .on('progress', (percentage) => {
+      console.log(`Notification job ${job.id} ${percentage}% complete`);
     });
-
-  job.on('complete', () => {
-    console.log(`Notification job ${job.id} completed`);
-  });
-
-  job.on('failed', (error) => {
-    console.log(`Notification job ${job.id} failed: ${error}`);
-  });
-
-  job.on('progress', (percentage) => {
-    console.log(`Notification job ${job.id} ${percentage}% complete`);
-  });
 }
 
 // Loop through each job and create it in the queue
